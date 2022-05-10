@@ -1,0 +1,100 @@
+import psycopg2
+
+class DB_Connection():
+
+    def __init__(self, host, dbname, user, pwd):
+        self.host = host
+        self.dbname = dbname
+        self.user = user
+        self.pwd = pwd
+
+    def getConnection(self):
+
+        try:
+            print(f"Trying connection to <{self.dbname}> at <{self.host}>...")
+            con = psycopg2.connect(
+                host = self.host,
+                database = self.dbname,
+                user = self.user,
+                password = self.pwd
+            )
+            print("Connection was successful.\n")
+        except (Exception, psycopg2.errors.ConnectionFailure) as error:
+            print(error)
+
+        return con
+
+class DB_Data():
+    metadataSize = 0
+
+    def __init__(self, localhost, database, user, password):
+        db = DB_Connection(localhost, database, user, password)
+        self.con = db.getConnection()
+
+    def getMetadata(self):
+
+        cur = self.con.cursor()
+        cur.execute('SELECT version()')
+        version = cur.fetchone()[0]
+        print(version)
+
+        cur.execute("SELECT table_name FROM information_schema.tables WHERE (table_schema = 'public') ORDER BY table_schema, table_name;")
+        tableList = cur.fetchall()
+        print("\nVIEW METADATA FOR TABLE:")
+        j = 1
+        for i in tableList:
+            print(j, "-", i[0])
+            j = j + 1
+        tableNumber = int(input("Table Number: "))
+        tableName = tableList[tableNumber - 1][0]
+
+        cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
+        s = f"\nMETADATA FROM TABLE <{tableName}>:"
+        print(s.upper())
+        data = cur.fetchall()
+        self.metadataSize = len(data)
+        self.printTable(self.metadataSize, 3, data)
+    
+    def getTable(self):
+
+        cur = self.con.cursor()
+        cur.execute("SELECT table_name FROM information_schema.tables WHERE (table_schema = 'public') ORDER BY table_schema, table_name;")
+        tableList = cur.fetchall()
+        print("\nVIEW DATA FOR TABLE:")
+        j = 1
+        for i in tableList:
+            print(j, "-", i[0])
+            j = j + 1
+        tableNumber = int(input("Table Number: "))
+        tableName = tableList[tableNumber - 1][0]
+
+        cur.execute(f"SELECT * FROM public.{tableName}")
+        columnNames = [desc[0] for desc in cur.description]
+        print(f"Table <{tableName}> found.")
+        print("Found column names: ")
+        j = 1
+        for i in columnNames:
+            print(j, "-", i)
+            j = j + 1
+        orderNum = int(input("Order by: "))
+        order = columnNames[orderNum - 1]
+
+        cur = self.con.cursor()
+        cur.execute(f"SELECT * FROM public.{tableName} ORDER BY {order}")
+        data = cur.fetchall()
+        size = len(data)
+        s = f"\nDATA FROM TABLE <{tableName}>:"
+        print(s.upper())
+        self.printTable(size, self.metadataSize, data)
+
+    def printTable(self, rows, columns, data):
+        for x in range(rows):
+            print("[", end = ' ')
+            for y in range(columns):
+                print(f"{data[x][y]};", end = ' ')
+            print(']')
+
+class main():
+    dbMetadata = DB_Data('localhost','testDB', 'testUsr', 'tstusr')
+    dbMetadata.getMetadata()
+    dbMetadata.getTable()
