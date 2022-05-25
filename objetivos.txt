@@ -7,8 +7,9 @@ Objetivos:
   - acesso aos metadados
   - funções de CRUD
   - dinamização dos metadados
+  - dinamizar acesso ao banco
  
  A Atingir:
-  - dinamizar acesso ao banco
+  - integração correta das classes
   - gerador de arquivos
   - montador/escritor de arquivos

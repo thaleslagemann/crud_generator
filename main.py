@@ -2,19 +2,32 @@ from dbConnection import dbConnection
 from crud_generator import crud_generator
 from dbData import dbData
 from dbMetadata import dbMetadata
+import getpass
 
 c = dbData()
-   
-c.setHost(c.getHost())
+
+host = "localhost"
+dbname = "testDB"
+user = "testUsr"
+#pwd = "tstusr"
+pwd = getpass.getpass("Password: ", stream = "*")
+
+#host = input("Host: ")
+c.setHost(host)
         
-c.setDbname(c.getDbname())
+#dbname = input("DB Name: ")
+c.setDbname(dbname)
         
-c.setUser(c.getUser())
-        
-c.setPwd(c.getPwd())
+#user = input("User: ")
+c.setUser(user)
+
+#pwd = input("Password: ")
+c.setPwd(pwd)
 
 dbmdt = dbMetadata(c)
 dbmdt.getMetadata()
+db = crud_generator(c)
+db.getTable()
 #a = client()
 #a._set_sql_insertion("INSERT test IN test")
 #a.print_value()

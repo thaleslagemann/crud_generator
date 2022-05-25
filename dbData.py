@@ -1,6 +1,3 @@
-import getpass
-
-
 class dbData():
 
     def __init__(self) -> None:
@@ -10,34 +7,25 @@ class dbData():
         self.pwd = str(None)
 
     def getHost(self):
-        host = input("Host: ")
-        return host
+        return self.host
 
     def setHost(self, host):
         self.host = host
 
     def getDbname(self):
-        dbname = input("DB Name: ")
-        return dbname
+        return self.dbname
 
     def setDbname(self, dbname):
         self.dbname = dbname
 
     def getUser(self):
-        user = input("User: ")
-        return user
+        return self.user
 
     def setUser(self, user):
         self.user = user
 
     def getPwd(self):
-        pwd = input("Password: ")
-        return pwd
+        return self.pwd
 
     def setPwd(self, pwd):
         self.pwd = pwd
-
-#    host = "localhost"
-#    dbname = "testDB"
-#    user = "testUsr"
-#    pwd = "tstusr"

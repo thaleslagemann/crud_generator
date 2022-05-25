@@ -1,7 +1,8 @@
 import psycopg2
 from dbConnection import dbConnection
+from model import model
 
-class dbMetadata():
+class dbMetadata(model):
 
     def __init__(self, c):
         self.c = c
@@ -27,5 +28,18 @@ class dbMetadata():
         s = f"\nMETADATA FROM TABLE <{tableName}>:"
         print(s.upper())
         data = cur.fetchall()
-        self.metadataSize = len(data)
-        self.printTable(self.metadataSize, 3, data)
+        metadataSize = len(data)
+        self.printTable(metadataSize, 3, data)
+        print(f"Closing connection to <{self.c.dbname}>.")
+        con.close()
+
+    def getTableSize(c, tableName):
+        con = dbConnection.openConnection(c)
+        cur = con.cursor()
+        cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
+        data = cur.fetchall()
+        tableSize = len(data)
+        return tableSize
+
+    def printTable(self, rows, columns, data):
+        return super().printTable(rows, columns, data)
