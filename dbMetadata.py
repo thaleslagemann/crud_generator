@@ -3,43 +3,73 @@ from dbConnection import dbConnection
 from model import model
 
 class dbMetadata(model):
-
-    def __init__(self, c):
-        self.c = c
-
-    def getMetadata(self):
-        con = dbConnection.openConnection(self.c)
+    
+    def getDBVersion(c):
+        con = dbConnection.openConnection(c)
         cur = con.cursor()
         cur.execute('SELECT version()')
         version = cur.fetchone()[0]
-        print(version)
+        
+        con.close()
+        return version
+
+    def getTableList(c):
+        con = dbConnection.openConnection(c)
+        cur = con.cursor()
 
         cur.execute("SELECT table_name FROM information_schema.tables WHERE (table_schema = 'public') ORDER BY table_schema, table_name;")
         tableList = cur.fetchall()
-        print("\nVIEW METADATA FOR TABLE:")
-        j = 1
-        for i in tableList:
-            print(j, "-", i[0])
-            j = j + 1
-        tableNumber = int(input("Table Number: "))
-        tableName = tableList[tableNumber - 1][0]
-
-        cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
-        s = f"\nMETADATA FROM TABLE <{tableName}>:"
-        print(s.upper())
-        data = cur.fetchall()
-        metadataSize = len(data)
-        self.printTable(metadataSize, 3, data)
-        print(f"Closing connection to <{self.c.dbname}>.")
+        
         con.close()
 
-    def getTableSize(c, tableName):
+        return tableList
+
+    def getTableMetadata(c, tableName):
         con = dbConnection.openConnection(c)
         cur = con.cursor()
-        cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
-        data = cur.fetchall()
-        tableSize = len(data)
-        return tableSize
 
-    def printTable(self, rows, columns, data):
-        return super().printTable(rows, columns, data)
+        cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
+        tableMetadata = cur.fetchall()
+        
+        con.close()
+        return tableMetadata
+
+    def getTable(c, tableName):
+        con = dbConnection.openConnection(c)
+        cur = con.cursor()
+        
+        mtdt = dbMetadata.getTableMetadata(c, tableName)
+        cur.execute(f"SELECT * FROM public.{tableName} ORDER BY {mtdt[0][0]}")
+        table = cur.fetchall()
+
+        con.close()
+        return table
+
+    def getTableColumnCount(c, tableName):
+        con = dbConnection.openConnection(c)
+        cur = con.cursor()
+        
+        cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
+        cc = len(cur.fetchall())
+
+        con.close()
+        return cc
+
+    def getTableLineCount(c, tableName):
+        con = dbConnection.openConnection(c)
+        cur = con.cursor()
+        
+        cur.execute(f"SELECT * FROM {tableName}")
+        cc = len(cur.fetchall())   
+
+        con.close()
+        return cc
+
+    def printMetadata(self, data):
+        s = f"\nMETADATA FROM TABLE <{self.tableName}>:"
+        print(s.upper())
+        metadataSize = len(data)
+        self.printTable(metadataSize, 3, data)
+
+    def printTable(self, lines, columns, data):
+        return super().printTable(lines, columns, data)
