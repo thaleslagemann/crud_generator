@@ -1,5 +1,5 @@
 import psycopg2
-from dbData import dbData
+from dbConnectionData import dbConnectionData
 
 class dbConnection():
 

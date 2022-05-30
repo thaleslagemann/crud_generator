@@ -1,16 +1,17 @@
 from dbConnection import dbConnection
 from crud_exemple import crud_exemple
-from dbData import dbData
+from dbConnectionData import dbConnectionData
 from dbMetadata import dbMetadata
+from classWriter import classWriter
 import getpass
 
-c = dbData()
+c = dbConnectionData()
 
 host = "localhost"
 dbname = "testDB"
 user = "testUsr"
 pwd = "tstusr"
-#pwd = getpass.getpass("Password: ", stream = "*")
+#pwd = getpass.getpass("Password: ")
 
 #host = input("Host: ")
 c.setHost(host)
@@ -49,7 +50,13 @@ tableList = dbMetadata.getTableList(c)
 tableName = "testtable"
 db = crud_exemple(c, tableName)
 
-db.viewTable(tableName)
+cw = classWriter(c, tableName)
+
+cw.createFile()
+
+cw.writeInFile()
+
+#db.viewTable(tableName)
 
 #print(f"Table <{tableName}> found.")
 

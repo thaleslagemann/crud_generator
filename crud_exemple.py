@@ -10,20 +10,21 @@ class crud_exemple(model):
         self.tableName = tableName
 
     # Método substituto da viewTable dos exemplos, pega uma table do banco e printa ela na tela
-    def viewTable(self, tableName):
-        lineCount = dbMetadata.getTableLineCount(self.c, tableName)
-        columnCount = dbMetadata.getTableColumnCount(self.c, tableName)
+    def viewTable(self):
+        lineCount = dbMetadata.getTableLineCount(self.c, self.tableName)
+        columnCount = dbMetadata.getTableColumnCount(self.c, self.tableName)
         print("Column count:", columnCount)
         print("Line count:", lineCount)
-        s = f"DATA FROM TABLE <{tableName}>:"
+        s = f"DATA FROM TABLE <{self.tableName}>:"
         print(s.upper())
-        table = dbMetadata.getTable(self.c, tableName)
+        table = dbMetadata.getTable(self.c, self.tableName)
         self.printTable(lineCount, columnCount, table)
 
     # Método que cria uma tabela nova na base de dados
     def newTable(self, con):
         tableName = input("New Table Name: ")
         cur = con.cursor()
+
         try:
             cur.execute(f"CREATE TABLE {tableName} (id integer, num integer, data varchar);")
             print(f"Table <{tableName}> creation successful.")
@@ -43,7 +44,6 @@ class crud_exemple(model):
         cur = con.cursor()
 
         try:
-
             print(type(data[0]), type(data[1]), type(data[2]))
             cur.execute(f"INSERT INTO {self.tableName} VALUES ({data[0]}, {data[1]}, '{data[2]}')")
             cur.execute(f"SELECT * FROM {self.tableName} WHERE id = {id}")
@@ -104,10 +104,6 @@ class crud_exemple(model):
         cur = con.cursor()
 
         try:
-            id = int(input("ID: "))
-            attribute1 = int(input("Attr1: "))
-            attribute2 = input("Attr2: ")
-
             print(type(data[0]), type(data[1]), type(data[2]))
             cur.execute(f"UPDATE {data[0]} WHERE table = '{self.tableName}' VALUES ({data[1]}, '{data[2]}')")
             cur.execute(f"SELECT * FROM {self.tableName} WHERE id = {data[0]}")
