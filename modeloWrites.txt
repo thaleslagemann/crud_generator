@@ -23,9 +23,8 @@ __classDeclaration
         con = dbConnection.openConnection(self.c)
         cur = con.cursor()
 
-            try:
-            cur.execute(f"INSERT INTO {self.tableName} VALUES ({data[0]}, {data[1]}, '{data[2]}')")
-            cur.execute(f"SELECT * FROM {self.tableName} WHERE id = {id}")
+        try:
+            __insertStandartDeclaration
             row = cur.fetchone()
             print(row)
 
@@ -34,3 +33,16 @@ __classDeclaration
         
         con.commit()
         con.close()
+
+    def updateItem(self, con, data):
+        cur = con.cursor()
+
+        try:
+            __updateStandartDeclaration
+            row = cur.fetchone()
+            print(row)
+
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+        
+        con.commit()
