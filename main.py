@@ -1,31 +1,31 @@
-from dbConnection import dbConnection
-from crud_exemple import crud_exemple
-from dbConnectionData import dbConnectionData
-from dbMetadata import dbMetadata
-from classWriter import classWriter
-import getpass
+from DbConnection import DbConnection
+from CrudExample import CrudExample
+from DbConnectionData import DbConnectionData
+from DbMetadata import DbMetadata
+from ClassWriter import ClassWriter
 
-c = dbConnectionData()
+connection = DbConnectionData()
 
 host = "localhost"
-dbname = "testDB"
-user = "testUsr"
-pwd = "tstusr"
+dbname = "testDb"
+user = "postgres"
+pwd = "bolagato21"
 #pwd = getpass.getpass("Password: ")
 
 #host = input("Host: ")
-c.setHost(host)
+connection.setHost(host)
         
 #dbname = input("DB Name: ")
-c.setDbname(dbname)
+connection.setDbname(dbname)
         
 #user = input("User: ")
-c.setUser(user)
+connection.setUser(user)
 
 #pwd = input("Password: ")
-c.setPwd(pwd)
+connection.setPwd(pwd)
 
-tableList = dbMetadata.getTableList(c)
+tableList = DbMetadata.getTableList(connection)
+
 #print("\nGET METADATA FOR TABLE:")
 #j = 1
 #for i in tableList:
@@ -33,33 +33,34 @@ tableList = dbMetadata.getTableList(c)
 #    j = j + 1
 #tableNumber = int(input("Table Number: "))
 #tableName = tableList[tableNumber - 1][0]
-#cur = c.cursor()
+#cur = connection.cursor()
 #cur.execute("SELECT table_name FROM information_schema.tables WHERE (table_schema = 'public') ORDER BY table_schema, table_name;")
 #tableList = cur.fetchall()
 #print("SELECT TABLE:")
 #j = 1
 #for i in tableList:
 #    print(j, "-", i[0])
-#   j = j + 1
+#    j = j + 1
 #tableNumber = int(input("Table Number: "))
 #tableName = tableList[tableNumber - 1][0]
 
-#cur.execute(f"SELECT * FROM public.{tableName}")
-#columnNames = [desc[0] for desc in cur.description]
+tableName = 'testtable'
 
-tableName = "testtable"
-db = crud_exemple(c, tableName)
+#DbMetadata.printMetadata(tableList, 'testTable')
+table = DbMetadata.getTable(connection, tableName)
+tableMdt = DbMetadata.getTableMetadata(connection, tableName)
 
-cw = classWriter(c, tableName)
+columns = DbMetadata.getTableColumnCount(connection, tableName)
+lines = DbMetadata.getTableLineCount(connection, tableName)
+
+DbMetadata.printMetadata(tableMdt, tableName)
+
+DbMetadata.printTable(lines, columns, table)
+
+db = CrudExample(connection, tableName)
+
+cw = ClassWriter(connection, tableName)
 
 cw.createFile()
 
 cw.writeInFile()
-
-#db.viewTable(tableName)
-
-#print(f"Table <{tableName}> found.")
-
-#a = client()
-#a._set_sql_insertion("INSERT test IN test")
-#a.print_value()

@@ -1,7 +1,7 @@
 import psycopg2
-from dbConnectionData import dbConnectionData
+from DbConnectionData import DbConnectionData
 
-class dbConnection():
+class DbConnection():
 
     def openConnection(c):
         try:

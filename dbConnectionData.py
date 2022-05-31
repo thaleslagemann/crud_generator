@@ -1,4 +1,4 @@
-class dbConnectionData():
+class DbConnectionData():
 
     def __init__(self) -> None:
         self.host = str(None)

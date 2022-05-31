@@ -1,7 +1,7 @@
 import psycopg2
-from model import model
-from dbConnection import dbConnection
-from dbMetadata import dbMetadata
+from Model import Model
+from DbConnection import DbConnection
+from DbMetadata import DbMetadata
 
 __classDeclaration
 
@@ -10,17 +10,17 @@ __classDeclaration
         self.tableName = tableName
 
     def viewTable(self):
-        lineCount = dbMetadata.getTableLineCount(self.c, self.tableName)
-        columnCount = dbMetadata.getTableColumnCount(self.c, self.tableName)
+        lineCount = DbMetadata.getTableLineCount(self.c, self.tableName)
+        columnCount = DbMetadata.getTableColumnCount(self.c, self.tableName)
         print("Column count:", columnCount)
         print("Line count:", lineCount)
         s = f"DATA FROM TABLE <{self.tableName}>:"
         print(s.upper())
-        table = dbMetadata.getTable(self.c, self.tableName)
+        table = DbMetadata.getTable(self.c, self.tableName)
         self.printTable(lineCount, columnCount, table)
 
     def insertItem(self, con, data):
-        con = dbConnection.openConnection(self.c)
+        con = DbConnection.openConnection(self.c)
         cur = con.cursor()
 
         try:
@@ -35,6 +35,7 @@ __classDeclaration
         con.close()
 
     def updateItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
         cur = con.cursor()
 
         try:

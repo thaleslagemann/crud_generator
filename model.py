@@ -1,6 +1,6 @@
 from abc import ABC, abstractclassmethod, abstractmethod
 
-class model(ABC):
+class Model(ABC):
 
     @abstractclassmethod
     def printTable(self, lines, columns, data):

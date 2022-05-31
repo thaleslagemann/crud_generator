@@ -1,9 +1,9 @@
 import psycopg2
-from dbConnection import dbConnection
-from dbConnectionData import dbConnectionData
-from dbMetadata import dbMetadata
+from DbConnection import DbConnection
+from DbConnectionData import DbConnectionData
+from DbMetadata import DbMetadata
 
-class classWriter():
+class ClassWriter():
 
     def __init__(self, c, tableName):
         self.c = c
@@ -21,10 +21,10 @@ class classWriter():
             print(error)
 
     def writeInFile(self):
-        mdt = dbMetadata.getTableMetadata(self.c, self.tableName)
+        mdt = DbMetadata.getTableMetadata(self.c, self.tableName)
 
         mdt_len = len(mdt)
-
+        print(self.tableName)
         print(mdt_len)
 
         try:
@@ -44,9 +44,9 @@ class classWriter():
         for line in text:   
             print("Line reads:", line)
             if '__classDeclaration' in line:
-                f.write(f'class {self.tableName}DAO(model):\n')
+                f.write(f'class {self.tableName}DAO(Model):\n')
                 print('Found class declaration.')
-                print(f'Replacing with "class {self.tableName}DAO(model):\\n"')
+                print(f'Replacing with "class {self.tableName}DAO(Model):\\n"')
             elif '__insertStandartDeclaration' in line and mdt_len is not 0:
                 sent = str()
                 for i in range (3):
