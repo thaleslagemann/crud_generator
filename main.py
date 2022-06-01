@@ -7,9 +7,9 @@ from ClassWriter import ClassWriter
 connection = DbConnectionData()
 
 host = "localhost"
-dbname = "testDb"
-user = "postgres"
-pwd = "bolagato21"
+dbname = "testDB"
+user = "testUsr"
+pwd = "tstusr"
 #pwd = getpass.getpass("Password: ")
 
 #host = input("Host: ")
