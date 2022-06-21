@@ -5,9 +5,9 @@ from DbMetadata import DbMetadata
 
 __classDeclaration
 
-    def __init__(self, c, tableName):
+    def __init__(self, c):
         self.c = c
-        self.tableName = tableName
+        __tableNameDeclaration
 
     def viewTable(self):
         lineCount = DbMetadata.getTableLineCount(self.c, self.tableName)
@@ -24,7 +24,7 @@ __classDeclaration
         cur = con.cursor()
 
         try:
-            __insertStandartDeclaration
+            __insertStandardDeclaration
             row = cur.fetchone()
             print(row)
 
@@ -39,11 +39,26 @@ __classDeclaration
         cur = con.cursor()
 
         try:
-            __updateStandartDeclaration
+            __updateStandardDeclaration
             row = cur.fetchone()
             print(row)
 
         except(Exception, psycopg2.errors.DatabaseError) as error:
             print(error)
         
+        con.commit()
+
+    def deleteItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
+        cur = con.cursor()
+        metadata = DbMetadata.getTableMetadata(con, self.tablename)
+
+        try:
+            __deleteStandardDeclaration
+            row = cur.fetchone()
+            print(row)
+        
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+
         con.commit()

@@ -47,7 +47,15 @@ class ClassWriter():
                 f.write(f'class {self.tableName}DAO(Model):\n')
                 print('Found class declaration.')
                 print(f'Replacing with "class {self.tableName}DAO(Model):\\n"')
-            elif '__insertStandartDeclaration' in line and mdt_len is not 0:
+            elif '__tableNameDeclaration' in line:
+                sent = str()
+                for i in range (2):
+                    sent += f'{identation}'
+                sent += f'self.tableName = \'{self.tableName}\'\n'
+                f.write(sent)
+                print('Found tablename declaration.')
+                print(f'Replacing with: {sent}')
+            elif '__insertStandardDeclaration' in line and mdt_len != 0:
                 sent = str()
                 for i in range (3):
                     sent += f'{identation}'
@@ -57,9 +65,9 @@ class ClassWriter():
                     sent += f"{i + 1}]"
                     sent += "}]"
                 sent += ')")\n'
-                print(f"Replacing __insertStandartDeclaration with:\n {sent}")
+                print(f"Replacing __insertStandardDeclaration with:\n {sent}")
                 f.write(sent)
-            elif '__updateStandartDeclaration' in line and mdt_len is not 0:
+            elif '__updateStandardDeclaration' in line and mdt_len != 0:
                 sent = str()
                 for i in range (3):
                     sent += f'{identation}'
@@ -69,7 +77,17 @@ class ClassWriter():
                     sent += f"{i + 1}]"
                     sent += "}]"
                 sent += ')")\n'
-                print(f"Replacing __updateStandartDeclaration with:\n {sent}")
+                print(f"Replacing __updateStandardDeclaration with:\n {sent}")
+                f.write(sent)
+            elif '__deleteStandardDeclaration' in line and mdt_len != 0:
+                sent = str()
+                for i in range (3):
+                    sent += f'{identation}'
+                sent += 'cur.execute(f"DELETE FROM {self.tablename} WHERE '
+                sent += f'{mdt[0][0]}'
+                sent += ' = \'{data[0]}\'")'
+                sent += '\n'
+                print(f"Replacing __deleteStandardDeclaration with:\n {sent}")
                 f.write(sent)
             else:
                 f.write(line)
