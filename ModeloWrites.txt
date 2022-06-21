@@ -62,3 +62,18 @@ __classDeclaration
             print(error)
 
         con.commit()
+
+    def researchItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
+        cur = con.cursor()
+        metadata = DbMetadata.getTableMetadata(con, self.tablename)
+
+        try:
+            __researchStandardDeclaration
+            row = cur.fetchone()
+            print(row)
+        
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+
+        con.commit()

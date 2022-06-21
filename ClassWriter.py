@@ -49,7 +49,7 @@ class ClassWriter():
                 print(f'Replacing with "class {self.tableName}DAO(Model):\\n"')
             elif '__tableNameDeclaration' in line:
                 sent = str()
-                for i in range (2):
+                for i in range(2):
                     sent += f'{identation}'
                 sent += f'self.tableName = \'{self.tableName}\'\n'
                 f.write(sent)
@@ -69,7 +69,7 @@ class ClassWriter():
                 f.write(sent)
             elif '__updateStandardDeclaration' in line and mdt_len != 0:
                 sent = str()
-                for i in range (3):
+                for i in range(3):
                     sent += f'{identation}'
                 sent += 'cur.execute(f"UPDATE {data[0]} WHERE table = \'{self.tableName}\' VALUES ({data[0]}'
                 for i in range(mdt_len - 1):
@@ -81,13 +81,21 @@ class ClassWriter():
                 f.write(sent)
             elif '__deleteStandardDeclaration' in line and mdt_len != 0:
                 sent = str()
-                for i in range (3):
+                for i in range(3):
                     sent += f'{identation}'
                 sent += 'cur.execute(f"DELETE FROM {self.tablename} WHERE '
                 sent += f'{mdt[0][0]}'
-                sent += ' = \'{data[0]}\'")'
-                sent += '\n'
+                sent += ' = \'{data[0]}\'")\n'
                 print(f"Replacing __deleteStandardDeclaration with:\n {sent}")
+                f.write(sent)
+            elif '__researchStandardDeclaration' in line and mdt_len != 0:
+                sent = str()
+                for i in range(3):
+                    sent += f'{identation}'
+                sent += 'cur.execute(f"SELECT * FROM {self.tablename} WHERE '
+                sent += f'{mdt[0][0]}'
+                sent += ' = \'{data[0]}\'")\n'
+                print(f"Replacing __researchStandardDeclaration with:\n {sent}")
                 f.write(sent)
             else:
                 f.write(line)
