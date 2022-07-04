@@ -1,6 +1,6 @@
 # Python CRUD Generator for Postgre Databases
 
-This Python application requires the PostgreSQL database adapter, Psycopg2, which can be downloaded on [here](https://pypi.org/project/psycopg2/), or by using the following commandline command:
+This Python application requires the PostgreSQL database adapter, Psycopg2, which can be downloaded [here](https://pypi.org/project/psycopg2/), or through the following python terminal command:
 ```
 pip install psycopg2
 ```
