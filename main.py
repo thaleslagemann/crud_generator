@@ -2,7 +2,7 @@
 # UFSM - 2022/1
 # Gerador de Cruds
 # Thales Augusto Lagemann - 201821179
-# Isadora Moro - 
+# Isadora Moro - 201920038
 
 from DbConnection import DbConnection
 from CrudExample import CrudExample
