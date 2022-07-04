@@ -6,21 +6,16 @@ from ClassWriter import ClassWriter
 
 conData = DbConnectionData()
 
-host = "localhost"
-dbname = "testDB"
-user = "testUsr"
-pwd = "tstusr"
-
-#host = input("Host: ")
+host = input("Host: ")
 conData.setHost(host)
         
-#dbname = input("DB Name: ")
+dbname = input("DB Name: ")
 conData.setDbname(dbname)
         
-#user = input("User: ")
+user = input("User: ")
 conData.setUser(user)
 
-#pwd = input("Password: ")
+pwd = input("Password: ")
 conData.setPwd(pwd)
 
 tableList = DbMetadata.getTableList(conData)
@@ -39,9 +34,8 @@ tableMdt = DbMetadata.getTableMetadata(conData, tableName)
 columns = DbMetadata.getTableColumnCount(conData, tableName)
 lines = DbMetadata.getTableLineCount(conData, tableName)
 
-#db = CrudExample(conData, tableName)
-
 cw = ClassWriter(conData, tableName)
 
-#cw.writeDAOFile()
+cw.writeDAOFile()
 cw.writeEntityFile()
+cw.writeExampleFile()

@@ -1,7 +1,7 @@
 from abc import ABC, abstractclassmethod, abstractmethod
 
 class Model(ABC):
-
+    
     @abstractclassmethod
     def printTable(self, lines, columns, data):
         for x in range(lines):

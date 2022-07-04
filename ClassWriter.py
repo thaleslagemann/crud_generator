@@ -2,6 +2,8 @@ import psycopg2
 from DbConnection import DbConnection
 from DbConnectionData import DbConnectionData
 from DbMetadata import DbMetadata
+from faker import *
+from random import seed, randint
 
 class ClassWriter():
 
@@ -172,3 +174,98 @@ class ClassWriter():
 
         finally:
             f.close()
+
+    def writeExampleFile(self):
+        mdt = DbMetadata.getTableMetadata(self.c, self.tableName)
+        dbdata = DbMetadata.getTable(self.c, self.tableName)
+
+        newFileName = self.tableName.capitalize()
+
+        mdt_len = len(mdt)
+        mdt_hei = DbMetadata.getTableLineCount(self.c, self.tableName)
+
+        seed(randint(0, 10000))
+        value = list()
+        for i in range(3):
+            value.append(randint(1,mdt_hei-1))
+
+        try:
+            f = open(f'{newFileName}Example.py', 'w')
+
+            if(f):
+                print("File opened successfully.\n")
+            else:
+                print("File opening failed.\n")
+                return
+
+            identation = '    '
+
+            sent = str()
+            sent += f'from {newFileName}DAO import {newFileName}DAO\n\n'
+            fake = Faker() # Fake data generator
+
+            sent += f'{newFileName}DAO.insertItem(' # Insert item example declaration
+            len_counter = 0
+            for data in mdt:
+                len_counter += 1
+                if data[1] == 'integer':
+                    sent += f'{randint(0, 1000)}'
+                elif data[1] == 'ARRAY':
+                    sent += f"'{fake.name()}'"
+                elif data[1] == 'character varying':
+                    sent += f"'{fake.name()}'"
+                elif data[1] == 'date':
+                    sent += f'{fake.date()}'
+                elif data[1] == 'char':
+                    sent += f"'{fake.char()}'"
+                else:
+                    sent += f'{randint(0, 1000)}'
+                if len_counter < mdt_len:
+                    sent += ', '
+                else:
+                    sent += ')\n\n'
+
+            sent += f'{newFileName}DAO.updateItem('
+            len_counter = 0
+            first = True
+
+            for data in mdt:
+                len_counter += 1
+                if first:
+                    first = False
+                    if dbdata[value[0]][0]:
+                        sent += f'{dbdata[value[0]][0]}'
+                    else:
+                        sent += f'{randint(1, mdt_hei-2)}'
+                elif data[1] == 'integer':
+                    sent += f'{randint(0, 1000)}'
+                elif data[1] == 'ARRAY':
+                    sent += f"'{fake.name()}'"
+                elif data[1] == 'character varying':
+                    sent += f"'{fake.name()}'"
+                elif data[1] == 'date':
+                    sent += f'{fake.date()}'
+                elif data[1] == 'char':
+                    sent += f"'{fake.char()}'"
+                else:
+                    sent += f'{randint(0, 1000)}'
+                if len_counter < mdt_len:
+                    sent += ', '
+                else:
+                    sent += ')\n\n'
+
+            sent += f'{newFileName}DAO.deleteItem('
+            sent += f'{value[1]}'
+            sent += ')\n\n'
+
+            sent += f'{newFileName}DAO.viewItem('
+            sent += f'{value[2]}'
+            sent += ')\n\n'
+
+            f.write(sent)
+
+
+
+        except (Exception) as error:
+            print(error)
+
