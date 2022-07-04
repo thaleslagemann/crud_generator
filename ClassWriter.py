@@ -264,8 +264,8 @@ class ClassWriter():
 
             f.write(sent)
 
-
-
         except (Exception) as error:
             print(error)
 
+        finally:
+            f.close()
