@@ -1,3 +1,9 @@
+# Trabalho 1 - Laboratório de Orientação a Objetos
+# UFSM - 2022/1
+# Gerador de Cruds
+# Thales Augusto Lagemann - 201821179
+# Isadora Moro - 
+
 from DbConnection import DbConnection
 from CrudExample import CrudExample
 from DbConnectionData import DbConnectionData
