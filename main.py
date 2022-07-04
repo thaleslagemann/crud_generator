@@ -4,63 +4,44 @@ from DbConnectionData import DbConnectionData
 from DbMetadata import DbMetadata
 from ClassWriter import ClassWriter
 
-connection = DbConnectionData()
+conData = DbConnectionData()
 
 host = "localhost"
 dbname = "testDB"
 user = "testUsr"
 pwd = "tstusr"
-#pwd = getpass.getpass("Password: ")
 
 #host = input("Host: ")
-connection.setHost(host)
+conData.setHost(host)
         
 #dbname = input("DB Name: ")
-connection.setDbname(dbname)
+conData.setDbname(dbname)
         
 #user = input("User: ")
-connection.setUser(user)
+conData.setUser(user)
 
 #pwd = input("Password: ")
-connection.setPwd(pwd)
+conData.setPwd(pwd)
 
-tableList = DbMetadata.getTableList(connection)
+tableList = DbMetadata.getTableList(conData)
 
-#print("\nGET METADATA FOR TABLE:")
-#j = 1
-#for i in tableList:
-#    print(j, "-", i[0])
-#    j = j + 1
-#tableNumber = int(input("Table Number: "))
-#tableName = tableList[tableNumber - 1][0]
-#cur = connection.cursor()
-#cur.execute("SELECT table_name FROM information_schema.tables WHERE (table_schema = 'public') ORDER BY table_schema, table_name;")
-#tableList = cur.fetchall()
-#print("SELECT TABLE:")
-#j = 1
-#for i in tableList:
-#    print(j, "-", i[0])
-#    j = j + 1
-#tableNumber = int(input("Table Number: "))
-#tableName = tableList[tableNumber - 1][0]
+print("\nGET METADATA FOR TABLE:")
+j = 1
+for i in tableList:
+    print(j, "-", i[0])
+    j = j + 1
+tableNumber = int(input("Table Number: "))
+tableName = tableList[tableNumber - 1][0]
 
-tableName = 'testtable'
+table = DbMetadata.getTable(conData, tableName)
+tableMdt = DbMetadata.getTableMetadata(conData, tableName)
 
-#DbMetadata.printMetadata(tableList, 'testTable')
-table = DbMetadata.getTable(connection, tableName)
-tableMdt = DbMetadata.getTableMetadata(connection, tableName)
+columns = DbMetadata.getTableColumnCount(conData, tableName)
+lines = DbMetadata.getTableLineCount(conData, tableName)
 
-columns = DbMetadata.getTableColumnCount(connection, tableName)
-lines = DbMetadata.getTableLineCount(connection, tableName)
+#db = CrudExample(conData, tableName)
 
-DbMetadata.printMetadata(tableMdt, tableName)
+cw = ClassWriter(conData, tableName)
 
-DbMetadata.printTable(lines, columns, table)
-
-db = CrudExample(connection, tableName)
-
-cw = ClassWriter(connection, tableName)
-
-cw.createFile()
-
-cw.writeInFile()
+#cw.writeDAOFile()
+cw.writeEntityFile()

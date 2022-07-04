@@ -1,0 +1,79 @@
+import psycopg2
+from Model import Model
+from DbConnection import DbConnection
+from DbMetadata import DbMetadata
+
+__classDeclaration
+
+    def __init__(self, c):
+        self.c = c
+        __tableNameDeclaration
+
+    def viewTable(self):
+        lineCount = DbMetadata.getTableLineCount(self.c, self.tableName)
+        columnCount = DbMetadata.getTableColumnCount(self.c, self.tableName)
+        print("Column count:", columnCount)
+        print("Line count:", lineCount)
+        s = f"DATA FROM TABLE <{self.tableName}>:"
+        print(s.upper())
+        table = DbMetadata.getTable(self.c, self.tableName)
+        self.printTable(lineCount, columnCount, table)
+
+    def insertItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
+        cur = con.cursor()
+
+        try:
+            __insertStandardDeclaration
+            row = cur.fetchone()
+            print(row)
+
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+        
+        con.commit()
+        con.close()
+
+    def updateItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
+        cur = con.cursor()
+
+        try:
+            __updateStandardDeclaration
+            row = cur.fetchone()
+            print(row)
+
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+        
+        con.commit()
+
+    def deleteItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
+        cur = con.cursor()
+        metadata = DbMetadata.getTableMetadata(con, self.tablename)
+
+        try:
+            __deleteStandardDeclaration
+            row = cur.fetchone()
+            print(row)
+        
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+
+        con.commit()
+
+    def researchItem(self, con, data):
+        con = DbConnection.openConnection(self.c)
+        cur = con.cursor()
+        metadata = DbMetadata.getTableMetadata(con, self.tablename)
+
+        try:
+            __researchStandardDeclaration
+            row = cur.fetchone()
+            print(row)
+        
+        except(Exception, psycopg2.errors.DatabaseError) as error:
+            print(error)
+
+        con.commit()

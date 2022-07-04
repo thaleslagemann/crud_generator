@@ -31,8 +31,6 @@ class DbMetadata(Model):
         cur.execute(f"SELECT column_name, data_type, character_maximum_length FROM INFORMATION_SCHEMA.columns WHERE table_name = '{tableName}'")
         tableMetadata = cur.fetchall()
         
-        print(tableMetadata)
-        
         con.close()
         return tableMetadata
 

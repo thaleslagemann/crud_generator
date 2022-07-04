@@ -1,0 +1,9 @@
+__classDeclaration
+
+    __initDeclaration
+        self.c = c
+        __tableNameDeclaration
+        __rowsDeclarationLoop
+
+    __gettersDeclaration
+    __settersDeclaration
